@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xmlns="http://maven.apache.org/POM/4.0.0"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <artifactId>spring-boot-with-react</artifactId>
+  <description>Demo project for Spring Boot</description>
+  <groupId>me.itzg</groupId>
+  <modelVersion>4.0.0</modelVersion>
+  <name>spring-boot-with-react</name>
+  <parent>
+    <artifactId>spring-boot-starter-parent</artifactId>
+    <groupId>org.springframework.boot</groupId>
+    <relativePath/>
+    <version>2.5.1</version> <!-- lookup parent from repository -->
+  </parent>
+  <properties>
+    <java.version>16</java.version>
+    <ui.directory>${project.basedir}/src/main/ui</ui.directory>
+    <node.version>16.1.0</node.version>
+  </properties>
+
+  <version>0.0.1-SNAPSHOT</version>
+  <dependencies>
+    <dependency>
+      <artifactId>spring-boot-starter-webflux</artifactId>
+      <groupId>org.springframework.boot</groupId>
+    </dependency>
+
+    <dependency>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <groupId>org.springframework.boot</groupId>
+      <scope>test</scope>
+    </dependency>
+    <dependency>
+      <artifactId>reactor-test</artifactId>
+      <groupId>io.projectreactor</groupId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
+  <build>
+    <plugins>
+      <plugin>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <groupId>org.springframework.boot</groupId>
+      </plugin>
+
+      <plugin>
+        <artifactId>frontend-maven-plugin</artifactId>
+        <groupId>com.github.eirslett</groupId>
+        <version>1.12.0</version>
+
+        <executions>
+
+          <execution>
+            <id>install node and npm</id>
+            <goals>
+              <goal>install-node-and-npm</goal>
+            </goals>
+          </execution>
+
+          <execution>
+            <id>react test</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>test</phase>
+            <configuration>
+              <arguments>test</arguments>
+              <workingDirectory>${ui.directory}</workingDirectory>
+              <environmentVariables>
+                <!-- Enable non-watch mode -->
+                <CI>true</CI>
+              </environmentVariables>
+            </configuration>
+          </execution>
+
+          <execution>
+            <id>react build</id>
+            <goals>
+              <goal>npm</goal>
+            </goals>
+            <phase>prepare-package</phase>
+            <configuration>
+              <arguments>run build</arguments>
+              <workingDirectory>${ui.directory}</workingDirectory>
+            </configuration>
+          </execution>
+
+        </executions>
+
+        <configuration>
+          <nodeVersion>v${node.version}</nodeVersion>
+          <installDirectory>${project.build.directory}</installDirectory>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>
